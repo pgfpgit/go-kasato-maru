@@ -1,0 +1,38 @@
+version: '3.5'
+
+services:
+  todo:
+    restart: always
+    build: ./microservices/todo
+    depends_on:
+      - datastore
+      - gateway_api
+    ports:
+      - 5050:5050
+    environment:
+      DB_HOST: 'mongodb://datastore:27017'
+
+  gateway_api:
+    image: devopsfaith/krakend:latest
+    volumes:
+      - ./krakend:/etc/krakend
+    ports:
+      - 8080:8080
+    restart: always
+
+  web:
+    build: ./web
+    ports:
+      - 80:80
+
+  datastore:
+    image: mongo
+    container_name: datastore
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --logpath=/dev/null

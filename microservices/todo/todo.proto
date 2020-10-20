@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package todo;
+
+import "github.com/metaverse/truss/deftree/googlethirdparty/annotations.proto";
+
+service Todo {
+
+  rpc AddItem(AddItemRequest) returns (ItemResponse){
+    option (google.api.http) = {
+      // All fields (In) are query parameters of the http request unless otherwise specified
+      put: "/item"
+    };
+  }
+
+  rpc DeleteItem(DeleteItemRequest) returns (ItemResponse){
+    option (google.api.http) = {
+      // All fields (In) are query parameters of the http request unless otherwise specified
+      delete: "/item"
+    };
+  }
+
+  rpc ListAll(EmptyRequest) returns (ListResponse){
+    option (google.api.http) ={
+      get: "/item"
+    };
+  }
+}
+
+message EmptyRequest{}
+
+
+message Item{
+  string text = 1;
+}
+
+message AddItemRequest{
+  string text = 1;
+}
+
+message DeleteItemRequest{
+  string id = 1;
+}
+
+message ListResponse{
+  repeated Item items = 1;
+}
+
+message ItemResponse{
+  string  text = 1;
+  int32   errorCode = 2;
+}
