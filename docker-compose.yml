@@ -6,13 +6,13 @@ services:
     build: ./microservices/todo
     depends_on:
       - datastore
-      - gateway_api
+      - krakend
     ports:
       - 5050:5050
     environment:
       DB_HOST: 'mongodb://datastore:27017'
 
-  gateway_api:
+  krakend:
     image: devopsfaith/krakend:latest
     volumes:
       - ./krakend:/etc/krakend
